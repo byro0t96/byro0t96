@@ -1,7 +1,6 @@
 # byro0t96.github.io
 🎩 My Simple 🕸 WebSite 🏭 : https://byro0t96.github.io
 
-
 <div align="center">
     <!--a href="" target="_blank"-->
         <img height="200" alt="byro0t96.github.io" src="./Screenshot/Screenshot-1.png">
