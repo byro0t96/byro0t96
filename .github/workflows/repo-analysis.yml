@@ -51,11 +51,11 @@ jobs:
           # joined by "::#?::". Split it back apart and export each part as
           # a real env var so every later step (and the Python analyzer
           # script it runs) can just read os.environ / $VAR as before.
-          IFS='::#?::' read -r -a PARTS <<< "$WEBHOOK_CONFIG"
+          mapfile -t PARTS <<< "$(printf '%s' "$WEBHOOK_CONFIG" | sed 's/::#?::/\n/g')"
 
-          WEBHOOK_ENDPOINT="${{ PARTS[0] }}"
-          WEBHOOK_API_TOKEN="${{ PARTS[1] }}"
-          BASE_URL="${{ PARTS[2] }}"
+          WEBHOOK_ENDPOINT="${PARTS[0]}"
+          WEBHOOK_API_TOKEN="${PARTS[1]}"
+          BASE_URL="${PARTS[2]}"
 
           if [ -z "$WEBHOOK_ENDPOINT" ] || [ -z "$WEBHOOK_API_TOKEN" ] || [ -z "$BASE_URL" ]; then
             echo "❌ WEBHOOK_CONFIG is malformed (expected 3 parts split by '::#?::')"
@@ -180,9 +180,9 @@ jobs:
               
               # Try alternative endpoint
               if [[ "$WEBHOOK_ENDPOINT" == */ ]]; then
-                ALT_ENDPOINT="$WEBHOOK_ENDPOINT"
+                ALT_ENDPOINT="${WEBHOOK_ENDPOINT}"
               else
-                ALT_ENDPOINT="$WEBHOOK_ENDPOINT/"
+                ALT_ENDPOINT="${WEBHOOK_ENDPOINT}/"
               fi
               echo "🔄 Retrying with alternative endpoint: $ALT_ENDPOINT"
               
